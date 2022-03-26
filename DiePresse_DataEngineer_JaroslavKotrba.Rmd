@@ -1,0 +1,142 @@
+---
+title: "Die Presse Case Study for Data Engineer"
+author: "Jaroslav Kotrba"
+date: "March 28, 2022"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_folding: show
+    number_sections: true
+---
+Solution of my case study consists of a Python script to retrieve and transform the data, a SQL script for creation of the "twitter" database and this page to present the result of the analysis.
+
+All scripts and data can be found under:
+https://github.com/JaroslavKotrba/TwitterDiePresse
+
+# Connect to database "twitter"
+```{r message=F, warning=F}
+# install.packages("RMySQL")
+library(RMySQL)
+mydb = dbConnect(MySQL(), user='Jaroslav_Kotrba', password='milites', dbname='twitter', host='localhost')
+dbListTables(mydb)
+
+# name
+rs = dbSendQuery(mydb, "select * from name;")
+name = fetch(rs, n = -1)
+dbClearResult(rs)
+
+# tweet
+rs = dbSendQuery(mydb, "select * from tweet")
+tweet = fetch(rs, n = -1)
+dbClearResult(rs)
+
+# length
+rs = dbSendQuery(mydb, "select * from length")
+length = fetch(rs, n = -1)
+dbClearResult(rs)
+
+# frequency
+rs = dbSendQuery(mydb, "select * from frequency")
+frequency = fetch(rs, n = -1)
+dbClearResult(rs)
+```
+
+# Summary data
+
+```{r message=F, warning=F}
+# install.packages("tidyverse")
+library(tidyverse)
+data <- name %>%
+    left_join(tweet, by='ID') %>%
+    left_join(length, by='ID')
+
+# Summary data
+summary(subset(data, select = c(NAME, TWEET, LENGTH)))
+```
+
+# TOP ten most active users
+
+```{r message=F, warning=F}
+library(tidyverse)
+NAME_groupby <- data.frame(data %>% group_by(NAME) %>% 
+                            summarise(
+                              LENGTH_of_tweet_average = mean(LENGTH),
+                              freq = n()
+                            ))
+head(NAME_groupby[order(-NAME_groupby$freq),],10)
+```
+
+```{r message=F, warning=F}
+viz <- head(NAME_groupby[order(-NAME_groupby$freq),],10)
+# install.packages("ggplot2")
+library(ggplot2)
+plot <- ggplot(viz, aes(x = freq, y = reorder(NAME, freq))) +
+  geom_col(stat='identity', color="cornflowerblue", fill="white") +
+  geom_text(aes(label=freq), vjust=0.5, hjust=1.8, color="cornflowerblue", size=3.5) +
+  ylab('NAME') +
+  xlab('COUNT') +
+  theme_bw()
+plot
+```
+
+# TOP ten longest tweets
+
+```{r message=F, warning=F}
+head(data[order(-data$LENGTH),],10)
+```
+
+```{r message=F, warning=F}
+x <- na.omit(data$LENGTH)
+SD <- sd(x)
+mean.auta <- mean(x)
+hist(x, breaks = 20, density = 20, prob=TRUE,
+     main="Distribution of tweets character length",
+     xlab="COUNT",
+     ylab="DENSITY",
+     cex.lab=1.2)
+quant <- seq(min(x),max(x),length=100)
+normaldens <- dnorm(quant,mean=mean.auta,sd=SD)
+lines(quant,normaldens,col="red",lwd=2)
+lines(density(x), col="cornflowerblue",lwd=2)
+legend("topright",c("normal distribution","observed distribution"),lty=c(1,1),
+       col=c("red","cornflowerblue"),lwd=2)
+```
+
+# Summary words
+
+```{r message=F, warning=F}
+words <- frequency
+summary(subset(words, select = c(WORD, COUNT)))
+```
+
+# TOP ten words
+
+```{r message=F, warning=F}
+head(subset(words, select = c(WORD, COUNT))[order(-words$COUNT),],10)
+```
+
+```{r message=F, warning=F}
+viz <- head(subset(words, select = c(WORD, COUNT))[order(-words$COUNT),],10)
+# install.packages("ggplot2")
+library(ggplot2)
+plot <- ggplot(viz, aes(x = COUNT, y = reorder(WORD, COUNT))) +
+  geom_col(stat='identity', color="cornflowerblue", fill="white") +
+  geom_text(aes(label=COUNT), vjust=0.5, hjust=1.25, color="cornflowerblue", size=3.5) +
+  ylab('WORD') +
+  theme_bw()
+plot
+```
+
+# Words associated with "Pandemic"
+
+```{r message=F, warning=F}
+# install.packages("wordcloud2")
+library(wordcloud2)
+viz <- head(subset(words, select = c(WORD, COUNT)), 1000)
+wordcloud2(data=viz, size = 4, color='random-dark', backgroundColor = "White")
+```
+
+Created by: Jaroslav Kotrba \
+https://jaroslavkotrba.com
