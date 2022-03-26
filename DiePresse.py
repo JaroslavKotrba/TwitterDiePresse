@@ -11,8 +11,8 @@ import time
 import pandas as pd
 
 # Approved by Twitter
-consumer_key = '7CGh9EyF3tgfsiU8HsC2gPDmL'
-consumer_secret = 'H4UqkqF7rWJlc5ccISV62qRnUl3s5rSChjfZHfQ2EHLWrROcAw'
+consumer_key = 'CUSTOMER_KEY'
+consumer_secret = 'CUSTOMER_SECRET_KEY'
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 redirect_url = auth.get_authorization_url()
