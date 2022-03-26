@@ -13,9 +13,8 @@ import pandas as pd
 # Approved by Twitter
 consumer_key = '7CGh9EyF3tgfsiU8HsC2gPDmL'
 consumer_secret = 'H4UqkqF7rWJlc5ccISV62qRnUl3s5rSChjfZHfQ2EHLWrROcAw'
-callback_uri = 'oob' # https://cfe.sh/twitter/callback
 
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret, callback_uri)
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 redirect_url = auth.get_authorization_url()
 print(redirect_url)
 
@@ -229,48 +228,3 @@ finally:
         cursor.close()
         connection.close()
         print("MySQL connection is closed")
-
-
-
-
-
-
-
-
-
-
-
-# table = soup.find('table',{'class': 'table table-striped table-bordered'})
-from twitterscraper import query_tweets
-import datetime as dt
-import pandas as pd
-
-begin_date = dt.date(2022,1,1)
-end_date = dt.date(2022,3,28)
-
-limit = 500
-lang = 'english'
-
-tweets = query_tweets('Pandemic', begindate = begin_date, enddate = end_date, limit = limit, lang = lang)
-df = pd.DataFrame(t.__dict__ for t in tweets)
-
-
-
-import tweepy
-import webbrowser
-import time
-import pandas as pd
-
-consumer_key = "7CGh9EyF3tgfsiU8HsC2gPDmL"
-consumer_key_secret = "H4UqkqF7rWJlc5ccISV62qRnUl3s5rSChjfZHfQ2EHLWrROcAw"
-access_token = "AAAAAAAAAAAAAAAAAAAAAGYEFAEAAAAAxgSsWCCjsT6HCI%2Fg%2FMvN7%2FvYF%2F4%3DXJaCx5y8hVLN6uRz0gTbCAZMyU6tc8kpsuHESs0vWTTSQ8fDNf"
-access_token_secret = "1148948208787349504-QP1Q6YnfPchQ4yJ2v9FfhL1TseIQTT"
-
-auth = tweepy.OAuthHandler(consumer_key, consumer_key_secret)
-auth.set_access_token(access_token, access_token_secret)
-api = tweepy.API(auth)
-print("Authenticated")
-
-api = tweepy.API(auth)
-
-user_info = api.get_user(screen_name='elonmusk')
