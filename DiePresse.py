@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------------------------------------------
-# Die Presse ----------------------------------------------------------------------------------------------------
+# Developer dashboard -------------------------------------------------------------------------------------------
 
 import os
 path = "/Users/HP/OneDrive/Documents/Python Anaconda/Twitter"
@@ -10,7 +10,7 @@ import webbrowser
 import time
 import pandas as pd
 
-# Approved by Twitter
+# Approved by Twitter https://developer.twitter.com/en/portal/dashboard
 consumer_key = 'CUSTOMER_KEY'
 consumer_secret = 'CUSTOMER_SECRET_KEY'
 
