@@ -64,7 +64,7 @@ df_check = df[df['tweet'].str.contains('Pandemic|pandemic')]; df_check
 df_check.to_csv('DiePresse.csv',  index = False)
 
 # ---------------------------------------------------------------------------------------------------------------
-# Feature engineering -------------------------------------------------------------------------------------------
+# Data cleaning -------------------------------------------------------------------------------------------------
 
 import pandas as pd
 data = pd.read_csv('DiePresse.csv'); data
