@@ -127,10 +127,10 @@ all_tweets
 
 # To get list of words
 all_words = list()
-for line in all_tweets:    
-    word = line.split()
-    for w in word: 
-       all_words.append(w)
+for tweet in all_tweets:    
+    words = tweet.split()
+    for word in words: 
+       all_words.append(word)
 
 all_words
 
