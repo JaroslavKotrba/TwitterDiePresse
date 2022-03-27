@@ -35,7 +35,7 @@ for status in my_timeline: # to see list of variables
         print(key)
 
 # search_tweets user_timeline
-def extract_timeline_as_df(q):
+def extract_tweets_as_df(q):
     number_of_tweets = 1000
     name = []
     tweet = []
@@ -56,7 +56,7 @@ def extract_timeline_as_df(q):
 
     return df
 
-df = extract_timeline_as_df('Pandemic'); df
+df = extract_tweets_as_df('Pandemic'); df
 
 # To make sure we have all with Pandemic
 df_check = df[df['tweet'].str.contains('Pandemic|pandemic')]; df_check
