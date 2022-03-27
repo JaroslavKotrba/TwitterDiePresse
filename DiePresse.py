@@ -34,7 +34,7 @@ for status in my_timeline: # to see list of variables
     for key in keys:
         print(key)
 
-# search_tweets user_timeline
+# search_tweets
 def extract_tweets_as_df(q):
     number_of_tweets = 1000
     name = []
